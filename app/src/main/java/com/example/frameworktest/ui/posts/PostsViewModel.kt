@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.frameworktest.R
 import com.example.frameworktest.data.model.Post
 import com.example.frameworktest.data.repository.PostRepository
 import com.example.frameworktest.data.response.PostsBodyResponse
@@ -18,6 +19,7 @@ class PostsViewModel(
 ) : ViewModel() {
 
     val postsLiveData: MutableLiveData<List<Post>> = MutableLiveData()
+    val viewFlipperLiveData: MutableLiveData<Pair<Int, Int?>> = MutableLiveData()
 
     fun getPosts() {
         viewModelScope.launch {
@@ -27,6 +29,7 @@ class PostsViewModel(
                 getPostsApi()
             } else {
                 postsLiveData.value = posts
+                viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
             }
         }
     }
@@ -55,29 +58,38 @@ class PostsViewModel(
                 call: Call<List<PostsBodyResponse>>,
                 response: Response<List<PostsBodyResponse>>
             ) {
-                if (response.isSuccessful) {
-                    val posts: MutableList<Post> = mutableListOf()
+                when {
+                    response.isSuccessful -> {
+                        val posts: MutableList<Post> = mutableListOf()
 
-                    response.body()?.let { PostsBodyResponse ->
-                        for (result in PostsBodyResponse){
-                            val post = Post(
-                                userId = result.userId,
-                                id = result.id,
-                                title = result.title,
-                                body = result.body
-                            )
-                            posts.add(post)
+                        response.body()?.let { PostsBodyResponse ->
+                            for (result in PostsBodyResponse){
+                                val post = result.getPostModel()
+                                posts.add(post)
+                            }
                         }
-                    }
 
-                    postsLiveData.value = posts
-                    savePostDb()
+                        postsLiveData.value = posts
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
+                        savePostDb()
+                    }
+                    response.code() === 401 -> {
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_401)
+                    }
+                    else -> {
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_401_generic)
+                    }
                 }
             }
             override fun onFailure(call: Call<List<PostsBodyResponse>>, t: Throwable) {
-
+                viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, R.string.error_500)
             }
         })
+    }
+
+    companion object {
+        private const val VIEW_FLIPPER_POSTS = 1
+        private const val VIEW_FLIPPER_ERROR = 2
     }
 
     @Suppress("UNCHECKED_CAST")

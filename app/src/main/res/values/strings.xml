@@ -3,4 +3,8 @@
     <string name="title_posts">Posts</string>
     <string name="title_todos">ToDos</string>
     <string name="title_albums">Albums</string>
+
+    <string name="error_401">Nao Autorizado</string>
+    <string name="error_401_generic">Error nao tratado</string>
+    <string name="error_500">Error</string>
 </resources>

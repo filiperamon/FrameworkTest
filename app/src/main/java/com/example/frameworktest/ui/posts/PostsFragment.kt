@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
 import com.example.frameworktest.data.db.AppDatabase
 import com.example.frameworktest.data.repository.PostDbDataSource
+import kotlinx.android.synthetic.main.fragment_posts.*
 
 class PostsFragment : Fragment() {
 
@@ -44,6 +45,16 @@ class PostsFragment : Fragment() {
             recyclePosts.apply {
                 layoutManager = LinearLayoutManager( activity , RecyclerView.VERTICAL,false)
                 adapter = PostsAdapter(posts)
+            }
+        })
+
+        postsViewModel.viewFlipperLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let { viewFlipper ->
+                vfPost.displayedChild = viewFlipper.first
+
+                viewFlipper.second?.let { msgErrorId ->
+                    tvError.text = getString(msgErrorId)
+                }
             }
         })
 
