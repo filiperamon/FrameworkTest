@@ -9,7 +9,6 @@ import com.example.frameworktest.data.model.Comments
 import com.example.frameworktest.data.repository.post.comments.CommentsRepository
 import com.example.frameworktest.data.response.CommentsBodyResponse
 import com.example.frameworktest.service.APIService
-import com.example.frameworktest.ui.posts.PostsViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,7 +29,7 @@ class CommentsViewModel(
                 getCommentsAPI(postId)
             } else {
                 commentsLiveData.value = listComments
-                viewFlipperLiveData.value = VIEW_FLIPPER_POSTS
+                viewFlipperLiveData.value = VIEW_FLIPPER_COMMENTS
             }
         }
     }
@@ -71,7 +70,7 @@ class CommentsViewModel(
                     }
 
                     commentsLiveData.value = listComments
-                    viewFlipperLiveData.value = VIEW_FLIPPER_POSTS
+                    viewFlipperLiveData.value = VIEW_FLIPPER_COMMENTS
                     saveCommandsDb()
                 }
             }
@@ -84,7 +83,7 @@ class CommentsViewModel(
     }
 
     companion object {
-        private const val VIEW_FLIPPER_POSTS = 1
+        private const val VIEW_FLIPPER_COMMENTS = 1
     }
 
     @Suppress("UNCHECKED_CAST")
