@@ -2,7 +2,7 @@ package com.example.frameworktest.ui.albums
 
 import androidx.lifecycle.*
 import com.example.frameworktest.data.model.Album
-import com.example.frameworktest.data.repository.AlbumRepository
+import com.example.frameworktest.data.repository.album.AlbumRepository
 import com.example.frameworktest.data.response.AlbumsBodyResponse
 import com.example.frameworktest.service.APIService
 import kotlinx.coroutines.launch
@@ -53,29 +53,26 @@ class AlbumsViewModel(
             override fun onResponse(
                 call: Call<List<AlbumsBodyResponse>>,
                 response: Response<List<AlbumsBodyResponse>>
-            ) {
+            ) = when {
+                response.isSuccessful -> {
+                    val Albums: MutableList<Album> = mutableListOf()
 
-                when {
-                    response.isSuccessful -> {
-                        val Albums: MutableList<Album> = mutableListOf()
-
-                        response.body()?.let { AlbumsBodyResponse ->
-                            for (result in AlbumsBodyResponse){
-                                val album = result.getAlbumModel()
-                                Albums.add(album)
-                            }
+                    response.body()?.let { AlbumsBodyResponse ->
+                        for (result in AlbumsBodyResponse){
+                            val album = result.getAlbumModel()
+                            Albums.add(album)
                         }
+                    }
 
-                        albumsLiveData.value = Albums
-                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
-                        saveAlbumDb()
-                    }
-                    response.code() === 401 -> {
-                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401)
-                    }
-                    else -> {
-                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401_generic)
-                    }
+                    albumsLiveData.value = Albums
+                    viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
+                    saveAlbumDb()
+                }
+                response.code() === 401 -> {
+                    viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401)
+                }
+                else -> {
+                    viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401_generic)
                 }
             }
 

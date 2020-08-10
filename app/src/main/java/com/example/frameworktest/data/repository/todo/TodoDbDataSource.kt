@@ -1,4 +1,4 @@
-package com.example.frameworktest.data.repository
+package com.example.frameworktest.data.repository.todo
 
 import com.example.frameworktest.data.dao.TodoDao
 import com.example.frameworktest.data.db.TodoEntity
@@ -9,7 +9,7 @@ import com.example.frameworktest.ui.todos.TodoViewParams
 
 class TodoDbDataSource(
     private val todoDao: TodoDao
-) :TodoRepository {
+) : TodoRepository {
 
     override suspend fun createTodo(todoViewParams: TodoViewParams) {
         val todoEntity: TodoEntity = todoViewParams.toTodoEntity()

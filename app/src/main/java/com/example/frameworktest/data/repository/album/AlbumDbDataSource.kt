@@ -1,4 +1,4 @@
-package com.example.frameworktest.data.repository
+package com.example.frameworktest.data.repository.album
 
 import com.example.frameworktest.data.dao.AlbumDao
 import com.example.frameworktest.data.db.*

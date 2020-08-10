@@ -5,13 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.frameworktest.data.dao.AlbumDao
+import com.example.frameworktest.data.dao.CommentDao
 import com.example.frameworktest.data.dao.PostDao
 import com.example.frameworktest.data.dao.TodoDao
 
 @Database(
     entities = [PostEntity::class
         , TodoEntity::class
-        , AlbumEntity::class]
+        , AlbumEntity::class
+        , CommentsEntity::class]
     , version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -19,6 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun todoDao(): TodoDao
     abstract fun albumDao(): AlbumDao
+    abstract fun commentDao(): CommentDao
 
     companion object {
         @Volatile

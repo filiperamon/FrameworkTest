@@ -2,7 +2,7 @@ package com.example.frameworktest.ui.todos
 
 import androidx.lifecycle.*
 import com.example.frameworktest.data.model.Todo
-import com.example.frameworktest.data.repository.TodoRepository
+import com.example.frameworktest.data.repository.todo.TodoRepository
 import com.example.frameworktest.data.response.TodosBodyResponse
 import com.example.frameworktest.service.APIService
 import kotlinx.coroutines.launch

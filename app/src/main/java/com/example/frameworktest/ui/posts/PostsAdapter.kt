@@ -10,12 +10,13 @@ import com.example.frameworktest.data.model.Post
 import kotlinx.android.synthetic.main.adapter_base.view.*
 
 class PostsAdapter(
-    private val posts: List<Post>
+    private val posts: List<Post>,
+    private val onItemClickListener: ((post: Post) -> Unit)
 ) : RecyclerView.Adapter<PostsAdapter.PostsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_base, parent,false)
-        return PostsViewHolder(view)
+        return PostsViewHolder(view, onItemClickListener)
     }
 
     override fun getItemCount() = posts.count()
@@ -24,19 +25,21 @@ class PostsAdapter(
         holder.bindView(posts[position])
     }
 
-    class PostsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PostsViewHolder(itemView: View,
+                          private val onItemClickListener: ((post: Post) -> Unit)
+    ) : RecyclerView.ViewHolder(itemView) {
         private val title = itemView.tvTitle
-        private val userId = itemView.tvUserId
-        private val id = itemView.tvId
         private val body = itemView.tvBody
         private val completed = itemView.tvCompleted
 
         fun bindView(post: Post) {
             title.text = post.title
-            userId.text = post.userId.toString()
-            id.text = post.id.toString()
             body.text = post.body
             completed.isGone = true
+
+            itemView.setOnClickListener {
+                onItemClickListener.invoke(post)
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.frameworktest.ui.todos
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
@@ -26,16 +27,12 @@ class TodosAdapter(
 
     class TodosViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title = itemView.tvTitle
-        private val userId = itemView.tvUserId
-        private val id = itemView.tvId
         private val body = itemView.tvBody
         private val completed = itemView.tvCompleted
 
         fun bindView(todo: Todo){
             title.text = todo.title
-            userId.text = todo.userId.toString()
-            id.text = todo.id.toString()
-            completed.text = todo.completed.toString()
+            completed.isChecked = todo.completed
             body.isGone = true
         }
     }

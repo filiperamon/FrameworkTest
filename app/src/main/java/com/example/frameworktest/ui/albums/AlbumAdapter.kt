@@ -27,15 +27,11 @@ class AlbumAdapter(
     class AlbumViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val title = itemView.tvTitle
-        private val userId = itemView.tvUserId
-        private val id = itemView.tvId
         private val body = itemView.tvBody
         private val completed = itemView.tvCompleted
 
         fun bindView(album: Album){
             title.text = album.title
-            userId.text = album.userId.toString()
-            id.text = album.id.toString()
             body.isGone = true
             completed.isGone = true
         }

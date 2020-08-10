@@ -1,21 +1,17 @@
 package com.example.frameworktest.ui.albums
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
 import com.example.frameworktest.data.db.AppDatabase
-import com.example.frameworktest.data.repository.AlbumDbDataSource
-import com.example.frameworktest.ui.posts.PostsAdapter
+import com.example.frameworktest.data.repository.album.AlbumDbDataSource
 import kotlinx.android.synthetic.main.fragment_base.*
 
 class AlbumsFragment : Fragment() {
@@ -25,7 +21,9 @@ class AlbumsFragment : Fragment() {
             val database = AppDatabase.getDatabase(requireContext())
 
             AlbumsViewModel.AlbumViewModelFactory(
-                albumRepository = AlbumDbDataSource(database.albumDao())
+                albumRepository = AlbumDbDataSource(
+                    database.albumDao()
+                )
             )
         }
     )

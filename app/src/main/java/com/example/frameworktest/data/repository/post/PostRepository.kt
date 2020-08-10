@@ -1,4 +1,4 @@
-package com.example.frameworktest.data.repository
+package com.example.frameworktest.data.repository.post
 
 import com.example.frameworktest.data.model.Post
 import com.example.frameworktest.ui.posts.PostViewParams

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
 import com.example.frameworktest.data.db.AppDatabase
-import com.example.frameworktest.data.repository.TodoDbDataSource
+import com.example.frameworktest.data.repository.todo.TodoDbDataSource
 import kotlinx.android.synthetic.main.fragment_base.*
 
 class TodosFragment : Fragment() {
@@ -21,7 +21,9 @@ class TodosFragment : Fragment() {
             val database = AppDatabase.getDatabase(requireContext())
 
             TodosViewModel.TodoViewModelFactory(
-                todoRepository = TodoDbDataSource(database.todoDao())
+                todoRepository = TodoDbDataSource(
+                    database.todoDao()
+                )
             )
         }
     )

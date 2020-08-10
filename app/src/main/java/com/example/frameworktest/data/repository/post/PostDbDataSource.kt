@@ -1,4 +1,4 @@
-package com.example.frameworktest.data.repository
+package com.example.frameworktest.data.repository.post
 
 import com.example.frameworktest.data.dao.PostDao
 import com.example.frameworktest.data.db.PostEntity
@@ -9,7 +9,7 @@ import com.example.frameworktest.ui.posts.PostViewParams
 
 class PostDbDataSource(
     private val postDao: PostDao
-) : PostRepository{
+) : PostRepository {
 
     override suspend fun createPost(postViewParams: PostViewParams) {
         val postEntity: PostEntity = postViewParams.toPostEntity()

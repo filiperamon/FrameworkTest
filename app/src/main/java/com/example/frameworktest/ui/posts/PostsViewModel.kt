@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.frameworktest.R
 import com.example.frameworktest.data.model.Post
-import com.example.frameworktest.data.repository.PostRepository
+import com.example.frameworktest.data.repository.post.PostRepository
 import com.example.frameworktest.data.response.PostsBodyResponse
 import com.example.frameworktest.service.APIService
 import kotlinx.coroutines.launch
