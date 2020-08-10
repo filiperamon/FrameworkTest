@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 class PostsViewModel(
     private val postRepository: PostRepository
 ) : ViewModel() {

@@ -1,7 +1,5 @@
 package com.example.frameworktest.ui.todos
 
-import android.telecom.Connection
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.frameworktest.data.model.Todo
 import com.example.frameworktest.data.repository.TodoRepository
@@ -12,11 +10,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 class TodosViewModel(
     private val todoRepository: TodoRepository
 ) : ViewModel() {
 
     val todoLiveData: MutableLiveData<List<Todo>> = MutableLiveData()
+    val viewFlipperLiveData: MutableLiveData<Pair<Int, Int?>> = MutableLiveData()
 
     fun getTodos() {
         viewModelScope.launch {
@@ -26,6 +26,7 @@ class TodosViewModel(
                 getTodosApi()
             } else {
                 todoLiveData.value = todos
+                viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
             }
         }
     }
@@ -54,24 +55,29 @@ class TodosViewModel(
                 call: Call<List<TodosBodyResponse>>,
                 response: Response<List<TodosBodyResponse>>
             ) {
-                if (response.isSuccessful) {
-                    val todos: MutableList<Todo> = mutableListOf()
+                when {
+                    response.isSuccessful -> {
+                        val todos: MutableList<Todo> = mutableListOf()
 
-                    response.body()?.let { TodosBodyResponse ->
-                        Log.d("FRSB", "TodosViewModel")
-                        for (result in TodosBodyResponse) {
-                            val todo: Todo = Todo(
-                                userId = result.userId,
-                                id = result.id,
-                                title = result.title,
-                                completed = result.completed
-                            )
-                            todos.add(todo)
+                        response.body()?.let { TodosBodyResponse ->
+
+                            for (result in TodosBodyResponse) {
+                                val todo: Todo = result.getTodosModel()
+                                todos.add(todo)
+                            }
                         }
-                    }
 
-                    todoLiveData.value = todos
-                    saveTodosDb()
+                        todoLiveData.value = todos
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
+                        saveTodosDb()
+
+                    }
+                    response.code() === 401 -> {
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401)
+                    }
+                    else -> {
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401_generic)
+                    }
                 }
             }
 
@@ -80,6 +86,12 @@ class TodosViewModel(
         })
     }
 
+    companion object {
+        private const val VIEW_FLIPPER_POSTS = 1
+        private const val VIEW_FLIPPER_ERROR = 2
+    }
+
+    @Suppress("UNCHECKED_CAST")
     class TodoViewModelFactory(private val todoRepository: TodoRepository) :
         ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

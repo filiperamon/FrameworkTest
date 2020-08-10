@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
 import com.example.frameworktest.data.db.AppDatabase
 import com.example.frameworktest.data.repository.TodoDbDataSource
+import kotlinx.android.synthetic.main.fragment_base.*
 
 class TodosFragment : Fragment() {
 
@@ -34,7 +35,7 @@ class TodosFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_todos, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_base, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,6 +48,15 @@ class TodosFragment : Fragment() {
             }
         })
 
+        todoViewModel.viewFlipperLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let { viewFlipper ->
+                vfPost.displayedChild = viewFlipper.first
+
+                viewFlipper.second?.let { msgErrorId ->
+                    tvError.text = getString(msgErrorId)
+                }
+            }
+        })
         todoViewModel.getTodos()
     }
 }

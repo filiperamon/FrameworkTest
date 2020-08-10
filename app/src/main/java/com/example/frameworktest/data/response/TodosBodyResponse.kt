@@ -1,5 +1,6 @@
 package com.example.frameworktest.data.response
 
+import com.example.frameworktest.data.model.Todo
 import com.google.gson.annotations.SerializedName
 
 class TodosBodyResponse (
@@ -11,4 +12,11 @@ class TodosBodyResponse (
     val title: String,
     @SerializedName("completed")
     val completed: Boolean
-)
+){
+    fun getTodosModel() = Todo(
+        userId = this.userId,
+        id = this.id,
+        title = this.title,
+        completed = this.completed
+    )
+}

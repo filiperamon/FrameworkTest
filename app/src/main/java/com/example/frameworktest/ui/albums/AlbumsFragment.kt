@@ -16,6 +16,7 @@ import com.example.frameworktest.R
 import com.example.frameworktest.data.db.AppDatabase
 import com.example.frameworktest.data.repository.AlbumDbDataSource
 import com.example.frameworktest.ui.posts.PostsAdapter
+import kotlinx.android.synthetic.main.fragment_base.*
 
 class AlbumsFragment : Fragment() {
 
@@ -38,7 +39,7 @@ class AlbumsFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_albums, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_base, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +49,16 @@ class AlbumsFragment : Fragment() {
             recyclePosts.apply {
                 layoutManager = LinearLayoutManager( activity , RecyclerView.VERTICAL,false)
                 adapter = AlbumAdapter(albums)
+            }
+        })
+
+        albumsViewModel.viewFlipperLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let { viewFlipper ->
+                vfPost.displayedChild = viewFlipper.first
+
+                viewFlipper.second?.let { msgErrorId ->
+                    tvError.text = getString(msgErrorId)
+                }
             }
         })
 

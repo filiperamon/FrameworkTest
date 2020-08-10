@@ -9,7 +9,7 @@
         android:id="@+id/navigation_post"
         android:name="com.example.frameworktest.ui.posts.PostsFragment"
         android:label="@string/title_posts"
-        tools:layout="@layout/fragment_posts" />
+        tools:layout="@layout/fragment_base" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

@@ -10,11 +10,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 class AlbumsViewModel(
     private val albumRepository: AlbumRepository
 ) : ViewModel() {
 
     val albumsLiveData: MutableLiveData<List<Album>> = MutableLiveData()
+    val viewFlipperLiveData: MutableLiveData<Pair<Int, Int?>> = MutableLiveData()
 
     fun getAlbums(){
         viewModelScope.launch {
@@ -24,6 +26,7 @@ class AlbumsViewModel(
                 getAlbumsApi()
             } else {
                 albumsLiveData.value = albums
+                viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
             }
         }
     }
@@ -52,28 +55,38 @@ class AlbumsViewModel(
                 response: Response<List<AlbumsBodyResponse>>
             ) {
 
-                if(response.isSuccessful){
-                    val Albums: MutableList<Album> = mutableListOf()
+                when {
+                    response.isSuccessful -> {
+                        val Albums: MutableList<Album> = mutableListOf()
 
-                    response.body()?.let { AlbumsBodyResponse ->
-                        for (result in AlbumsBodyResponse){
-                            val album = Album(
-                                userId = result.userId,
-                                id = result.id,
-                                title = result.title
-                            )
-                            Albums.add(album)
+                        response.body()?.let { AlbumsBodyResponse ->
+                            for (result in AlbumsBodyResponse){
+                                val album = result.getAlbumModel()
+                                Albums.add(album)
+                            }
                         }
-                    }
 
-                    albumsLiveData.value = Albums
-                    saveAlbumDb()
+                        albumsLiveData.value = Albums
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_POSTS, null)
+                        saveAlbumDb()
+                    }
+                    response.code() === 401 -> {
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401)
+                    }
+                    else -> {
+                        viewFlipperLiveData.value = Pair(VIEW_FLIPPER_ERROR, com.example.frameworktest.R.string.error_401_generic)
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<AlbumsBodyResponse>>, t: Throwable) {
             }
         })
+    }
+
+    companion object {
+        private const val VIEW_FLIPPER_POSTS = 1
+        private const val VIEW_FLIPPER_ERROR = 2
     }
 
     @Suppress("UNCHECKED_CAST")

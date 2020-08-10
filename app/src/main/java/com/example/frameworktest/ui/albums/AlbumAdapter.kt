@@ -7,14 +7,14 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
 import com.example.frameworktest.data.model.Album
-import kotlinx.android.synthetic.main.adapter_posts.view.*
+import kotlinx.android.synthetic.main.adapter_base.view.*
 
 class AlbumAdapter(
     private val albums: List<Album>
 ) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_posts, parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_base, parent,false)
         return AlbumViewHolder(view)
     }
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.frameworktest.R
 import com.example.frameworktest.data.db.AppDatabase
 import com.example.frameworktest.data.repository.PostDbDataSource
-import kotlinx.android.synthetic.main.fragment_posts.*
+import kotlinx.android.synthetic.main.fragment_base.*
 
 class PostsFragment : Fragment() {
 
@@ -35,7 +35,7 @@ class PostsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_posts, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_base, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
